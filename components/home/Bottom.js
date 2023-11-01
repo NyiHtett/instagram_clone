@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native'
+import { View, TouchableOpacity, Image, StyleSheet } from 'react-native'
 import React, { useState} from 'react'
 import { Divider } from 'react-native-elements'
 
@@ -22,6 +22,11 @@ export const bottomTabIcons = [
     name: 'Shop',
     active: 'https://img.icons8.com/fluency-systems-filled/144/ffffff/home.png',
     inactive: 'https://img.icons8.com/fluency-systems-regular/48/ffffff/home.png',
+  },
+  {
+    name: 'profile',
+    active: 'https://pyxis.nymag.com/v1/imgs/4cd/212/81283ed5194911027fd285de7b326616f0-04-end-of-the-world.1x.rsocial.w1200.jpg',
+    inactive: 'https://pyxis.nymag.com/v1/imgs/4cd/212/81283ed5194911027fd285de7b326616f0-04-end-of-the-world.1x.rsocial.w1200.jpg',
   }
 ]
 
@@ -34,7 +39,13 @@ const Bottom = ({icons}) => {
   const Icon = ({icon}) => (
     <TouchableOpacity onPress={()=> setActiveTab(icon.name)}>
     <Image source = {{uri: activeTab === icon.name ? icon.active : icon.inactive}} 
-    style = {styles.icon}/>
+    style = {[
+      styles.icon,
+      icon.name == 'profile' ? styles.profilePic() : null,
+      //style for the profile when it's clicked
+      activeTab == 'profile' && icon.name === activeTab ? 
+      styles.profilePic(activeTab) : null,
+      ]}/>
     </TouchableOpacity>
   )
   return (
@@ -51,6 +62,11 @@ const Bottom = ({icons}) => {
 
 const styles = StyleSheet.create({
   wrapper: {
+    position: 'absolute',
+    width: '100%',
+    bottom: '3%',
+    zIndex: 999,
+    backgroundColor: '#000'
   },
   container: {
     flexDirection: 'row',
@@ -62,7 +78,15 @@ const styles = StyleSheet.create({
   icon: {
     width: 30,
     height: 30,
-  }
-})
+  },
+  /**
+   * dynamic profile
+   */
+  profilePic: (activeTab = '') =>  ({
+    borderRadius: 50, 
+    borderWidth: activeTab === 'Profile' ? 2 : 0,
+    borderColor: '#fff',
+  }),
+  })
 
 export default Bottom
